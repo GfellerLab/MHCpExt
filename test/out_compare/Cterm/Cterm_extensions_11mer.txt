@@ -1,0 +1,2 @@
+Cluster	11-mers	Cterm_Extension	Expected	SD	Tot_pep_ass	Fraction	Z-score
+Cluster_1	307	1	2.62	1.52	274	0.004	-1.069

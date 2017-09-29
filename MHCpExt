@@ -1,0 +1,232 @@
+#!/bin/bash
+
+############
+# Written by David Gfeller
+#
+# MHCpExt is meant to identify C- and N-terminal extensions within large datasets of HLA-I ligands.
+# It is especially appropriate for HLA peptidomics data.
+# MHCpExt takes as input a list of peptides (typically all peptides identified by MS in a sample),
+# and gives as output the predicted N- or C-terminal extensions among 10-, 11-, and 12-mers.
+#
+# The script requires MixMHCp to be installed in your path ( see https://github.com/GfellerLab/MixMHCp)
+#
+# For any question, please contact david.gfeller@unil.ch
+#
+# To cite MHCpExt, please refer to:
+# Guillaume et al., The C-terminal extension landscape of naturally presented HLA-I ligands (2017).
+#
+# MHCpExt can be used freely by academic groups for non-commercial purposes (see license).
+# The product is provided free of charge, and, therefore, on an "as is"
+# basis, without warranty of any kind.
+#
+# FOR-PROFIT USERS
+# If you plan to use MHCpExt in any for-profit
+# application, you are required to obtain a separate license.
+# To do so, please contact eauffarth@licr.org or lfoit@licr.org at the Ludwig Institute for  Cancer Research Ltd.
+#
+# Copyright (2017) David Gfeller
+############
+
+
+# Command line: MHCpExt -i input_file -o output_dir -n Number_of_Clusters
+
+lib_path="YOUR PATH TO MHCpExt/lib FOLDER"
+
+
+if [[ "$lib_path" =~ " " ]]; then
+    echo Spaces in path to MHCpExt are not supported
+    echo Make sure you have set the correct path in MHCpExt
+    exit 1;
+fi
+
+if [ ! -f "$lib_path"/predict_extensions.pl ]; then
+	echo MHCpExt resources not found. Make sure you have set the correct path for lib_path in MHCpExt file.
+	exit 1;
+fi
+
+MixMHCp_path=$(which MixMHCp);
+if [ ! -f "$MixMHCp_path" ]; then
+	echo MixMHCp cannot be found in your PATH. Make sure you have correctly installed MixMHCp.
+	exit 1;
+fi
+
+usage="Usage: MHCpExt -i INPUT_FILE -o OUTPUT_DIR -n NUMBER_OF_CLUSTERS"
+
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+cat <<END
+$usage
+Mandatory parameters:
+
+  -i, --input             Absolute or relative path to the input file (list of peptides)
+  -o, --output            Name of the output directopry
+
+Optional parameters: 
+
+  -n, --ncl               Number of clusters to be used in MixMHCp - if not provided, the algorithm chooses it between 1 and 6
+  -nm, --name             Name of the different clusters (separated by commas, e.g., A0101,A0201,B0702,B0801). Only valid if the number of clusters(-n) is given in input.
+  -lr, --length_ref       Reference length (default 9)
+  -l1, --min_length       Minimum length for longer peptides (default 10)
+  -l2, --max_length       Maximum length for longer peptides (default 11)
+END
+	exit 0;
+fi
+
+
+# Parse flags
+while [ $# -gt 0 ]; do
+	case $1 in
+		-i | --input) input_file=$2; shift 2;;
+		-o | --output) output_dir=$2; shift 2;;
+		-n | --ncl) ncl=$2; shift 2;;
+		-nm | --name) cluster_name=$2; shift 2;;
+		-lr | --length_ref) lr=$2; shift 2;;
+		-l1 | --min_length) l1=$2; shift 2;;
+		-l2 | --max_length) l2=$2; shift 2;;	      
+		*) shift 1;;
+	esac
+done
+
+decide_cluster=0
+#If the number of clusters is not given in input, let the algorithm choose it based on the results of MixMHCp
+if [ ! -n "$ncl" ]
+then
+    ncl=6
+    decide_cluster=1
+    echo "The number of clusters will be selected by the algorithm itself."
+    if [ -n "$cluster_name" ]
+    then
+	echo "Cluster names will not be considered"
+	cluster_name=""
+    fi
+else
+    if [ -n "$cluster_name" ]
+    then
+	arr=(${cluster_name//,/ })
+	if [ $ncl -ne ${#arr[@]} ]
+	then
+	    echo "Invalid cluster names. Names will not be considered"
+	    cluster_name=""
+	fi
+    fi
+fi
+
+if [ ! -n "$lr" ]; then
+    lr=9  
+fi
+if [ ! -n "$l1" ]; then
+    l1=10 
+fi
+if [ ! -n "$l2" ]; then
+    l2=12  
+fi
+
+input_file=`perl -e 'use Cwd "abs_path";print abs_path(shift)' $input_file`;
+if [ ! -f "$input_file" ]
+then
+    echo "Missing/Wrong input file"
+    exit 1;
+fi
+if [[ "$input_file" =~ " " ]]; then
+    echo Spaces in path to input file are not supported
+    exit 1;
+fi
+
+###
+
+if [ ! -n "$output_dir" ]
+then
+    echo "Missing output directory"
+    exit 1;
+fi
+if [[ "$output_dir" =~ " " ]]; then
+    echo Spaces in output path are not supported
+    exit 1;
+fi
+
+if [ ! -d $output_dir ]
+then
+    mkdir -p $output_dir
+fi
+output_dir=`perl -e 'use Cwd "abs_path";print abs_path(shift)' $output_dir`;
+
+############
+#Sort (unique peptides) and separate the 9-mers, 10-mers, 11-mers and 12-mers
+############
+
+sort -u $input_file > $output_dir/data.txt
+
+gr=$(grep [0123456789abcdefghijklmnopqrstuvwxyzBJOUXZ\=\:\;\!\@\#\$\%\^\&\*\(\)\>\<\.\,\?\+\_\'\"\{\}] $output_dir/data.txt)
+if [ -n "$gr" ]; then
+    echo "Invalid sequences: $gr"
+    exit
+fi
+gr=$(grep ' ' $output_dir/data.txt)
+if [ -n "$gr" ]; then
+   echo "Invalid sequences: $gr"
+   exit
+fi
+gr=$(grep "-" $output_dir/data.txt)
+if [ -n "$gr" ]; then
+   echo "Invalid sequences: $gr"
+   exit
+fi
+gr=$(grep "\t" $output_dir/data.txt)
+if [ -n "$gr" ]; then
+   echo "Invalid sequences: $gr"
+   exit
+fi
+
+awk '{if(length($1)=="'"$lr"'"){ print $1}}' $output_dir/data.txt > $output_dir/class1_$lr.txt
+for (( i=$l1; i<=$l2; i++ ))
+do
+    awk '{if(length($1)=="'"$i"'"){ print $1}}' $output_dir/data.txt > $output_dir/class1_$i.txt
+done
+
+# Check the files for the reference length
+
+nl=$(wc -l < "$output_dir/class1_$lr.txt")
+if [ $nl -lt 20 ]
+then
+    echo "Too few $lr-mers ("$nl")"
+    exit
+fi
+
+
+#########
+# Run the deconvolution of the 9-mers.
+#########
+
+if [ ! -d $output_dir/MixMHCp ]
+then
+    mkdir $output_dir/MixMHCp
+fi
+
+MixMHCp -i $output_dir/class1_9.txt -o $output_dir/MixMHCp/ -m $ncl
+
+if [ $decide_cluster -eq 1 ]
+then
+    read -r line < $output_dir/MixMHCp/KLD/best_ncl.txt
+    ncl=${line##*:}
+fi
+
+##########
+# Run the predictions for C-terminal extensions
+##########
+
+if [ ! -d  $output_dir/Cterm ]
+then
+    mkdir $output_dir/Cterm
+fi
+if [ ! -d  $output_dir/Nterm ]
+then
+    mkdir $output_dir/Nterm
+fi
+if [ ! -d  $output_dir/buldge ]
+then
+    mkdir $output_dir/buldge
+fi
+
+for (( i=$l1; i<=$l2; i++ ))
+do
+    perl $lib_path/predict_extensions.pl $output_dir/class1_$i.txt $output_dir/ $ncl $i $lib_path $cluster_name
+done
