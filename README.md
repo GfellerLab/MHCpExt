@@ -1,25 +1,25 @@
 
 ############
-# Written by David Gfeller
-#
-# The script requires MixMHCp to be installed in your path (see https://github.com/GfellerLab/MixMHCp)
-#
-# For any question, please contact david.gfeller@unil.ch
-#
-# MHCpExt can be used freely by academic groups for non-commercial purposes (see license).
-# The product is provided free of charge, and, therefore, on an "as is"
-# basis, without warranty of any kind.
-#
-# FOR-PROFIT USERS
-# If you plan to use MHCpExt in any for-profit
-# application, you are required to obtain a separate license.
-# To do so, please contact eauffarth@licr.org or lfoit@licr.org at the Ludwig Institute for  Cancer Research Ltd.
-#
-# If you use MixMHCpred1.1 in a publication, please cite:
-# Guillaume et al. The C-terminal extension landscape of naturally
-# presented HLA-I ligands, BioRxiv, doi:10.1101/213264 (2017).
-#
-# Copyright (2017) David Gfeller
+Written by David Gfeller
+
+The script requires MixMHCp to be installed in your path (see https://github.com/GfellerLab/MixMHCp)
+
+For any question, please contact david.gfeller@unil.ch
+
+MHCpExt can be used freely by academic groups for non-commercial purposes (see license).
+The product is provided free of charge, and, therefore, on an "as is"
+basis, without warranty of any kind.
+
+FOR-PROFIT USERS
+If you plan to use MHCpExt in any for-profit
+application, you are required to obtain a separate license.
+To do so, please contact eauffarth@licr.org or lfoit@licr.org at the Ludwig Institute for  Cancer Research Ltd.
+
+If you use MixMHCpred1.1 in a publication, please cite:
+Guillaume et al. The C-terminal extension landscape of naturally
+presented HLA-I ligands, BioRxiv, doi:10.1101/213264 (2017).
+Copyright (2017) David Gfeller
+
 ############
 
 
