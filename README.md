@@ -1,5 +1,6 @@
 
 ############
+
 Written by David Gfeller
 
 The script requires MixMHCp to be installed in your path (see https://github.com/GfellerLab/MixMHCp)
@@ -15,9 +16,10 @@ If you plan to use MHCpExt in any for-profit
 application, you are required to obtain a separate license.
 To do so, please contact eauffarth@licr.org or lfoit@licr.org at the Ludwig Institute for  Cancer Research Ltd.
 
-If you use MixMHCpred1.1 in a publication, please cite:
+If you use MHCpExt in a publication, please cite:
 Guillaume et al. The C-terminal extension landscape of naturally
 presented HLA-I ligands, BioRxiv, doi:10.1101/213264 (2017).
+
 Copyright (2017) David Gfeller
 
 ############
