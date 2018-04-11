@@ -70,5 +70,10 @@ To test your installation, from the MHCpExt/ directory, run:
 MHCpExt -i test/A0301.txt -o test/out -n 1
 
 This should take between one and two minutes on a standard computer.
-Apart from path names, the output should be the same as in test/out_compare.
-This file corresponds to peptides identified in HLA peptidomics study of a mono-allelic HLA-A03:01 positive cell line [Abelin et al Immunity 2017].
+If you use MixMHCp2.0, apart from path names, the output should be the
+same as in test/out_compare.
+If you are using older versions of MixMHCp, there may be other changes.
+The input file corresponds to peptides identified in HLA peptidomics study
+of a mono-allelic HLA-A03:01 positive cell line
+[Abelin et al Immunity 2017].
+

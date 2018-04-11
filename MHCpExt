@@ -30,9 +30,8 @@
 
 # Command line: MHCpExt -i input_file -o output_dir -n Number_of_Clusters
 
-#lib_path="YOUR PATH TO MHCpExt/lib FOLDER"
-lib_path="/Users/davidgfeller/Research/LICR/Github/Versions/MHCpExt/MHCpExt1.0/lib"
-echo $lib_path
+lib_path="YOUR PATH TO MHCpExt/lib FOLDER"
+
 
 if [[ "$lib_path" =~ " " ]]; then
     echo Spaces in path to MHCpExt are not supported
@@ -197,6 +196,7 @@ fi
 # Run the deconvolution of the 9-mers.
 #########
 
+rm -r $output_dir/MixMHCp
 if [ ! -d $output_dir/MixMHCp ]
 then
     mkdir $output_dir/MixMHCp
