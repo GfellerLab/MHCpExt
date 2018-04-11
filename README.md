@@ -7,7 +7,7 @@ The script requires MixMHCp to be installed in your path (see https://github.com
 
 For any question, please contact david.gfeller@unil.ch
 
-MHCpExt can be used freely by academic groups for non-commercial purposes (see license).
+MHCpExt1.0 can be used freely by academic groups for non-commercial purposes (see license).
 The product is provided free of charge, and, therefore, on an "as is"
 basis, without warranty of any kind.
 
@@ -18,7 +18,7 @@ To do so, please contact eauffarth@licr.org or lfoit@licr.org at the Ludwig Inst
 
 If you use MHCpExt in a publication, please cite:
 Guillaume et al. The C-terminal extension landscape of naturally
-presented HLA-I ligands, BioRxiv, doi:10.1101/213264 (2017).
+presented HLA-I ligands, PNAS (2018).
 
 Copyright (2017) David Gfeller
 

@@ -13,7 +13,7 @@
 # For any question, please contact david.gfeller@unil.ch
 #
 # To cite MHCpExt, please refer to:
-# Guillaume et al., The C-terminal extension landscape of naturally presented HLA-I ligands (2017).
+# Guillaume et al., The C-terminal extension landscape of naturally presented HLA-I ligands, PNAS (2018).
 #
 # MHCpExt can be used freely by academic groups for non-commercial purposes (see license).
 # The product is provided free of charge, and, therefore, on an "as is"
@@ -30,8 +30,9 @@
 
 # Command line: MHCpExt -i input_file -o output_dir -n Number_of_Clusters
 
-lib_path="YOUR PATH TO MHCpExt/lib FOLDER"
-
+#lib_path="YOUR PATH TO MHCpExt/lib FOLDER"
+lib_path="/Users/davidgfeller/Research/LICR/Github/Versions/MHCpExt/MHCpExt1.0/lib"
+echo $lib_path
 
 if [[ "$lib_path" =~ " " ]]; then
     echo Spaces in path to MHCpExt are not supported
@@ -209,8 +210,10 @@ then
     ncl=${line##*:}
 fi
 
+echo "Number of clusters: "$ncl
+
 ##########
-# Run the predictions for C-terminal extensions
+# Run the predictions for N- and C-terminal extensions
 ##########
 
 if [ ! -d  $output_dir/Cterm ]

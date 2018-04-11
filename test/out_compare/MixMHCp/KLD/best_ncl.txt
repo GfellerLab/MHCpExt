@@ -1,1 +1,2 @@
 Final number of motifs:	1
+1	12.287092

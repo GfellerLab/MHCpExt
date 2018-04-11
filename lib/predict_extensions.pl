@@ -165,12 +165,18 @@ $Npep9=0;
 
 open IN, "$output_dir/MixMHCp/responsibility/resp_$ncluster.txt", or die;
 $l=<IN>;
+@a=split(' ', $l);
+if($a[$ncl+1]=="Trash"){
+    $trash=1;
+} else {
+    $trash=0;
+}
 while ($l=<IN>) {
     $l =~ s/\r?\n$//;
     chomp($l);
     @a=split(' ', $l);
     $max=0;
-    for ($cl=0; $cl<$ncluster; $cl++) {
+    for ($cl=0; $cl<$ncluster+$trash; $cl++) {
 	if ($a[$cl+1]>$max) {
 	    $cluster=$cl;
 	    $max=$a[$cl+1];

@@ -1,0 +1,2 @@
+Length	N	1_weight	Trash_weight	1_distr	Trash_distr
+9	758	0.974282	0.025718	1.000000	1.000000
