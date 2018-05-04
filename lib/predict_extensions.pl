@@ -54,7 +54,7 @@ $fr_top=0.02;
 ###########
 
 
-open IN, "$lib_path/../data/Homo_sapiens_all_RefSeq.txt";
+open IN, "$lib_path/../data/Homo_sapiens_all_RefSeq.txt", or die;
 $l=<IN>;
 $nprot=0;
 while ($l=<IN>) {
@@ -166,7 +166,7 @@ $Npep9=0;
 open IN, "$output_dir/MixMHCp/responsibility/resp_$ncluster.txt", or die;
 $l=<IN>;
 @a=split(' ', $l);
-if($a[$ncl+1]=="Trash"){
+if($a[$ncluster+1] eq "Trash"){
     $trash=1;
 } else {
     $trash=0;
@@ -176,13 +176,13 @@ while ($l=<IN>) {
     chomp($l);
     @a=split(' ', $l);
     $max=0;
-    for ($cl=0; $cl<$ncluster+$trash; $cl++) {
+    for ($cl=0; $cl<$ncluster+$trash; $cl++) { 
 	if ($a[$cl+1]>$max) {
 	    $cluster=$cl;
 	    $max=$a[$cl+1];
 	}
     }
-    if ($max>$Thresh_resp) {
+    if ($max>$Thresh_resp && $cluster<$ncluster) { # Do not include peptides from the trash
 	push @{$pep9[$cluster]}, $a[0]; 
 	$c1++;
     }
@@ -233,6 +233,8 @@ for ($cl=0; $cl<$ncluster; $cl++) {
     }
 }
 
+
+
 ##############################
 # Find the optimal threshold for each cluster
 ##############################
@@ -262,7 +264,6 @@ for ($j=0; $j<$ncluster; $j++) {
     $Thresh[$j]=2;
 	
 }
-
 
 
 ###############################
@@ -352,7 +353,7 @@ for ($j=0; $j<$ncluster; $j++) {
 		
 	$ct++;
 		
-	@res=check_extensions($l, $j);
+	@res=check_extensions($l, $j); # 1 for C-terminal ext; 1 for N-terminal ext; 1 for bulges; score for C-term; Score for N-term; Score for bulges; 1 for unambiguous allele assignment 
 
 	$max=-1000;
 	for ($ii=3; $ii<=5; $ii++) {
@@ -388,6 +389,11 @@ for ($j=0; $j<$ncluster; $j++) {
 	if ( ($res[3] > $Thresh[$j] ||  $res[4] > $Thresh[$j] || $res[5] > $Thresh[$j]) && $res[6]==1 ) {
 	    $Tot_pep_ass++;
 	}
+
+	#####
+	# Note that longer peptides that would be in the trash of MixMHCp2.0 are automatically excluded, because they score with any model is smaller than 0
+	#####
+	
     }
     close IN;
     

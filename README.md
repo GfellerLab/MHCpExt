@@ -28,7 +28,7 @@ Copyright (2017) David Gfeller
 ### Explanations ####
 
 This scripts allows you to find cases of C- or N-terminal extensions in large datasets of peptide ligands, assuming that the canonical peptides have length 9.
-It is tehreforeespecially designed to analyse HLA peptidomics datasets
+It is therefore especially designed to analyse HLA peptidomics datasets
 
 As input, you should give a file containing a list of all peptides (any length). Typically, this could be the results of an HLA peptidomics screen on a cell line and tissue sample.
 
@@ -43,8 +43,7 @@ Alternatively, you can run MixMHCp on the 9-mers and see in KLD/best_ncl.txt fil
 
 In MHCpExt, manually put the path to the MHCpExt/lib folder at "YOUR PATH TO MHCpExt/lib FOLDER".
 
-Make sure awk and perl are installed on your computer and MixMHCp1.0 is installed and in your $PATH (see https://github.com/GfellerLab/MixMHCp).
-Please note that this version of MHCpExt is not compatible with MixMHCp2.0. We are working on the new version to ensure compatibility
+Make sure awk and perl are installed on your computer and MixMHCp is installed and in your $PATH (see https://github.com/GfellerLab/MixMHCp).
 
 The script should work on Mac and Linux. Depending on the size of the dataset, it can take several minutes to run.
 
@@ -71,10 +70,5 @@ To test your installation, from the MHCpExt/ directory, run:
 MHCpExt -i test/A0301.txt -o test/out -n 1
 
 This should take between one and two minutes on a standard computer.
-If you use MixMHCp2.0, apart from path names, the output should be the
-same as in test/out_compare.
-If you are using older versions of MixMHCp, there may be other changes.
-The input file corresponds to peptides identified in HLA peptidomics study
-of a mono-allelic HLA-A03:01 positive cell line
-[Abelin et al Immunity 2017].
-
+Apart from path names, the output should be the same as in test/out_compare.
+This file corresponds to peptides identified in HLA peptidomics study of a mono-allelic HLA-A03:01 positive cell line [Abelin et al Immunity 2017].
