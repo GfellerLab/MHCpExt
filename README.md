@@ -43,7 +43,8 @@ Alternatively, you can run MixMHCp on the 9-mers and see in KLD/best_ncl.txt fil
 
 In MHCpExt, manually put the path to the MHCpExt/lib folder at "YOUR PATH TO MHCpExt/lib FOLDER".
 
-Make sure awk and perl are installed on your computer and MixMHCp is installed and in your $PATH (see https://github.com/GfellerLab/MixMHCp).
+Make sure awk and perl are installed on your computer and MixMHCp1.0 is installed and in your $PATH (see https://github.com/GfellerLab/MixMHCp).
+Please note that this version of MHCpExt is not compatible with MixMHCp2.0. We are working on the new version to ensure compatibility
 
 The script should work on Mac and Linux. Depending on the size of the dataset, it can take several minutes to run.
 
